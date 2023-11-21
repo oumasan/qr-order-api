@@ -1,16 +1,11 @@
 FROM golang:latest
 
-WORKDIR /src
-COPY ./src /src
+WORKDIR /app
 
-RUN go mod init main \
-  && go mod tidy \
-  && go build
+#RUN go mod tidy
 
-ENV CGO_ENABLED=0 \
-  GOOS=linux \
-  GOARCH=amd64
+RUN go install github.com/cosmtrek/air@latest
+
+CMD ["air"]
+
 EXPOSE 9090
-
-
-CMD ["go", "run", "main.go"]
