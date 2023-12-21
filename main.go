@@ -62,11 +62,37 @@ func main() {
 	})
 
 	// 大分類登録
-	e.POST("/broad-category/:id", func(c echo.Context) error {
+	e.POST("/shops/:id/broad-category", func(c echo.Context) error {
 		// ショップID
-		shopId := c.Param("id")
+		//broadCategoryName := c.Param("broadCategoryName")
+		var requestBody structs.BroadCategoryBody
+		if err := c.Bind(&requestBody); err != nil {
+			return err
+		}
+		models.CreateBroadCategory(c, requestBody)
+		return c.JSON(http.StatusOK, true)
+	})
 
-		return c.String(http.StatusOK, shopId)
+	// 大分類削除
+	e.DELETE("/broad-category/:id", func(c echo.Context) error {
+		models.DeleteBroadCategory(c)
+		return c.JSON(http.StatusOK, true)
+	})
+
+	// 小分類登録
+	e.POST("/shops/:id/sub-category", func(c echo.Context) error {
+		var requestBody structs.SubCategoryBody
+		if err := c.Bind(&requestBody); err != nil {
+			return err
+		}
+		models.CreateSubCategory(requestBody)
+		return c.JSON(http.StatusOK, true)
+	})
+
+	// 小分類削除
+	e.DELETE("/sub-category/:id", func(c echo.Context) error {
+		models.DeleteSubCategory(c)
+		return c.JSON(http.StatusOK, true)
 	})
 
 	e.Logger.Fatal(e.Start(":9090"))
@@ -78,33 +104,6 @@ func getShop(c echo.Context) error {
 	DB.First(&shop, c.Param("id"))
 	return c.JSON(http.StatusOK, shop)
 }
-
-// 分類取得
-// func getBroadCategory(c echo.Context) []BroadCategory {
-// 	broadCategoryList := []BroadCategory{}
-// 	DB.Where("shop_id = ?", c.Param("id")).Find(&broadCategoryList)
-// 	return broadCategoryList
-// }
-
-// 大分類登録
-// func createBroadCategory(c echo.Context) error {
-// 	broadCategory := BroadCategory{}
-// 	if err := c.Bind(&broadCategory); err != nil {
-// 		return err
-// 	}
-// 	DB.Create(&broadCategory)
-// 	return c.JSON(http.StatusCreated, broadCategory)
-// }
-
-// // 小分類登録
-// func createSubCategory(c echo.Context) error {
-// 	subCategory := SubCategory{}
-// 	if err := c.Bind(&subCategory); err != nil {
-// 		return err
-// 	}
-// 	DB.Create(&subCategory)
-// 	return c.JSON(http.StatusCreated, subCategory)
-// }
 
 func stringToUint(s string) uint {
 	uintVal, err := strconv.ParseUint(s, 10, 64)

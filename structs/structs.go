@@ -1,40 +1,37 @@
 package structs
 
-import (
-	"time"
-)
-
-// type BroadCategory struct {
-// 	ID uint
-// 	Name string
-// }
-
-// type SubCategory struct {
-// 	ID uint
-// 	Name string
-// 	Price uint
-// 	ImageUrl string
-// }
-
 type BroadCategory struct {
 	ID        uint      `json:"id"`
-	shopId    uint      `json:"shopId"`
+	ShopId    uint      `json:"shopId"`
 	Name      string    `json:"name"`
-	CreateAt time.Time `json:"createAt"`
-	UpdateAt time.Time `json:"updateAt"`
+	CreateAt string `json:"createAt"`
+	UpdateAt string `json:"updateAt"`
 }
 
 type SubCategory struct {
-	ID        uint      `json:"id  param:"id""`
-	BroadCategoryId uint `json:"broadCategoryId"`
+	ID        uint      `json:"id"`
+	BroadCategoryId string `json:"broadCategoryId"`
 	Name      string    `json:"name"`
-	Price     uint      `json:"price"`
+	Price     string      `json:"price"`
 	ImageUrl  string    `json:"imageUrl"`
-	CreateAt time.Time `json:"createAt"`
-	UpdateAt time.Time `json:"updateAt"`
+	CreateAt string `json:"createAt"`
+	UpdateAt string `json:"updateAt"`
 }
 
 type Category struct {
 	BroadCategory BroadCategory `json:"broadCategory"`
 	SubCategoryList []SubCategory `json:"subCategoryList"`
+}
+
+// RequestBody はJSONリクエストボディの構造体です
+type BroadCategoryBody struct {
+	BroadCategoryName   string `json:"broadCategoryName"`
+}
+
+// RequestBody はJSONリクエストボディの構造体です
+type SubCategoryBody struct {
+	BroadCategoryId string `json:"broadCategoryId"`
+	Name      string    `json:"name"`
+	Price     string      `json:"price"`
+	ImageUrl  string    `json:"imageUrl"`
 }
