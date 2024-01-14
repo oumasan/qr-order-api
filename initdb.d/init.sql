@@ -38,6 +38,21 @@ CREATE TABLE sub_categories(
     FOREIGN KEY(broad_category_id) REFERENCES broad_categories(id)
 )ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
+/** 会計 */
+DROP TABLE IF EXISTS accountants;
+CREATE TABLE accountants(
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    shop_id INT(10) NOT NULL,
+    sub_category_id INT(10) NOT NULL,
+    accountant_id VARCHAR(50) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    price INT(10) NOT NULL,
+    count INT(10) NOT NULL,
+    create_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    update_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY(id)
+)ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
 
 /** 初期データ挿入 */
 insert into shops (name) values ('テストショップ');

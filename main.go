@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"fmt"
 	"strconv"
 	"time"
 	"net/http"
@@ -13,6 +12,7 @@ import (
 
 	"qr-order-system/models"
 	"qr-order-system/structs"
+	"fmt"
 )
 
 type Shop struct {
@@ -50,12 +50,10 @@ func main() {
 		broadCategoryList := models.GetBroadCategory(c)
 		
 		// 小分類取得
-		for index, broadCategory := range broadCategoryList {
+		for _, broadCategory := range broadCategoryList {
 			subCategory := models.GetSubCategory(broadCategory)
 			category := structs.Category{broadCategory, subCategory}
 			response = append(response, category)
-			
-			fmt.Print(index)
 		}
 
 		return c.JSON(http.StatusOK, response)
@@ -93,6 +91,25 @@ func main() {
 	e.DELETE("/sub-category/:id", func(c echo.Context) error {
 		models.DeleteSubCategory(c)
 		return c.JSON(http.StatusOK, true)
+	})
+
+	// 注文確定
+	e.POST("/customer/cart", func(c echo.Context) error {
+		var requestBody structs.CartBody
+		fmt.Printf("(%%+v) %+v\n", requestBody)
+		if err := c.Bind(&requestBody); err != nil {
+			return err
+		}
+		models.CreateAccountant(requestBody)
+		return c.JSON(http.StatusOK, true)
+	})
+
+	// 会計取得
+	e.GET("/customer/accoutant/:id", func(c echo.Context) error {
+		// 大分類取得
+		response := models.GetAccountant(c)
+
+		return c.JSON(http.StatusOK, response)
 	})
 
 	e.Logger.Fatal(e.Start(":9090"))
